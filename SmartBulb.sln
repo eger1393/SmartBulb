@@ -1,8 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb.TpLinkApi", "SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj", "{38C66B61-25C0-4900-8D14-7B992D0648C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb.Data", "SmartBulb.Data\SmartBulb.Data.csproj", "{C961C3A2-A883-474D-A5AF-C8165A7A6345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb", "SmartBulb\SmartBulb.csproj", "{31F86999-FFA8-407B-B246-C3E1DB1546C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38C66B61-25C0-4900-8D14-7B992D0648C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C66B61-25C0-4900-8D14-7B992D0648C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C66B61-25C0-4900-8D14-7B992D0648C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C66B61-25C0-4900-8D14-7B992D0648C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C961C3A2-A883-474D-A5AF-C8165A7A6345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C961C3A2-A883-474D-A5AF-C8165A7A6345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C961C3A2-A883-474D-A5AF-C8165A7A6345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C961C3A2-A883-474D-A5AF-C8165A7A6345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

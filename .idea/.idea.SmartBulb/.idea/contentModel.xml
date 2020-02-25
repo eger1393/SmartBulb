@@ -2,7 +2,50 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\sources\SmartBulb" t="IncludeFlat">
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="SmartBulb" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="SmartBulb.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="SmartBulb.csproj" t="IncludeRecursive" />
+        <e p="Startup.cs" t="Include" />
+      </e>
+      <e p="SmartBulb.Data" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Class1.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="SmartBulb.Data.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="SmartBulb.Data.csproj" t="IncludeRecursive" />
+      </e>
       <e p="SmartBulb.sln" t="IncludeFlat" />
+      <e p="SmartBulb.TpLinkApi" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Class1.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="SmartBulb.TpLinkApi.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="SmartBulb.TpLinkApi.csproj" t="IncludeRecursive" />
+      </e>
     </e>
     <e p="C:\Users\GANSOR\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\GANSOR\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_SmartBulb.1832176409.00" t="ExcludeRecursive" />
