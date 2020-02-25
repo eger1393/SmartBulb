@@ -1,2 +1,4 @@
 ﻿# Default ignored files
 /.idea.SmartBulb/.idea/workspace.xml
+# Editor-based HTTP Client requests
+/.idea.SmartBulb/.idea/httpRequests/
