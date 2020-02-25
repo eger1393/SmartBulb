@@ -35,8 +35,16 @@
       </e>
       <e p="SmartBulb.sln" t="IncludeFlat" />
       <e p="SmartBulb.TpLinkApi" t="IncludeRecursive">
+        <e p="Abstract" t="Include">
+          <e p="ITpLink.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
-        <e p="Class1.cs" t="Include" />
+        <e p="Implementation" t="Include">
+          <e p="TpLink.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="Device.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
