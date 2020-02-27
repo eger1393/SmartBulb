@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SmartBulb.TpLinkApi.Abstract;
@@ -21,7 +20,35 @@ namespace SmartBulb.TpLinkApi.Implementation
         {
             Guid.NewGuid();
             this._client = client;
-            Authorize().Wait();
+            if(string.IsNullOrEmpty(Token))
+                Authorize().Wait();
+        }
+
+        public async Task SetDeviceState(string deviceId, LightState lightState)
+        {
+            // string deviceId = "80123F24B6E23A46BE3207A29DC1958C1BAEBF37";
+            var comm = new RequestBulb()
+            {
+                Service = new LightService()
+                {
+                    State = lightState
+                    //     new LightState()
+                    // {
+                    //     Power = PowerState.On,
+                    //     Brightness = 100,
+                    //     Hue = 100,
+                    //     Saturation = 100,
+                    //     TransitionTime = 4000
+                    // }
+                }
+            };
+            string command = JsonConvert.SerializeObject(comm);
+            var response = await CreateRequest("passthrough", new Dictionary<string, string>()
+            {
+                {"deviceId", deviceId},
+                {"requestData", command}
+            });
+            var json = await response.Content.ReadAsStringAsync();
         }
 
         public async Task<dynamic> GetDeviceList()
@@ -55,15 +82,58 @@ namespace SmartBulb.TpLinkApi.Implementation
                 Method = method,
                 Params = param
             };
-            message.Content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            }));
+            message.Content = new StringContent(JsonConvert.SerializeObject(payload));
             message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return _client.SendAsync(message);
         }
     }
 
+    public class RequestBulb
+    {
+        [JsonProperty("smartlife.iot.smartbulb.lightingservice")]
+        public LightService Service { get; set; }
+    }
+
+    public class LightService
+    {
+        [JsonProperty("transition_light_state")]
+        public LightState State { get; set; }
+    }
+    
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+    public class LightState
+    {
+        [JsonProperty("on_off")]
+        public  PowerState? Power { get; set; }
+        
+        [JsonProperty("brightness")]
+        public int? Brightness { get; set; }
+        
+        [JsonProperty("hue")]
+        public int? Hue { get; set; }
+        
+        [JsonProperty("saturation")]
+        public int? Saturation { get; set; }
+        
+        /// <summary>
+        /// Время перехода из одного состояния в другое
+        /// </summary>
+        [JsonProperty("transition_period")]
+        public  long? TransitionTime { get; set; }
+
+        /// <summary>
+        ///  Хз что это, но в доке часто исспользуется для внутренних комманд
+        /// </summary>
+        [JsonProperty("ignore_default")]
+        private int IgnoreDefault { get; set; } = 1;
+    }
+    
+    public enum PowerState {
+        Off,
+        On,
+    }
+    
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class RequestPayload
     {
         [JsonProperty("method")] 
