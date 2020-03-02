@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartBulb.TpLinkApi.Abstract;
 using SmartBulb.TpLinkApi.Implementation;
+using SmartBulb.TpLinkApi.Models;
 
 namespace SmartBulb.Controllers
 {
@@ -25,6 +26,15 @@ namespace SmartBulb.Controllers
         {
             var res = await _tpLink.GetDeviceList();
             return Ok(res);
+        }
+
+        [HttpGet("getState")]
+        public async Task<IActionResult> GetState([FromQuery] string deviceId)
+        {
+            if (string.IsNullOrEmpty(deviceId))
+                return BadRequest("deviceId con`n be null or empty");
+            await _tpLink.GetDeviceState(deviceId);
+            return Ok();
         }
         
         [HttpPost("setState")]
@@ -82,7 +92,7 @@ namespace SmartBulb.Controllers
         public string DeviceId { get; set; }
         [Required]
         [JsonProperty("state")]
-        public LightState State { get; set; }
+        public BulbState State { get; set; }
     }
 
     public class WaitTask : ITaskItem

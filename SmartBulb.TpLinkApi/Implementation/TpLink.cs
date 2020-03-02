@@ -24,22 +24,34 @@ namespace SmartBulb.TpLinkApi.Implementation
                 Authorize().Wait();
         }
 
-        public async Task SetDeviceState(string deviceId, LightState lightState)
+        public async Task GetDeviceState(string deviceId)
         {
-            // string deviceId = "80123F24B6E23A46BE3207A29DC1958C1BAEBF37";
             var comm = new RequestBulb()
             {
-                Service = new LightService()
+                Service = new BulbStateService()
                 {
-                    State = lightState
-                    //     new LightState()
-                    // {
-                    //     Power = PowerState.On,
-                    //     Brightness = 100,
-                    //     Hue = 100,
-                    //     Saturation = 100,
-                    //     TransitionTime = 4000
-                    // }
+                    GetState = new BulbState()
+                }
+            };
+            string command = JsonConvert.SerializeObject(comm);
+            var response = await CreateRequest("passthrough", new Dictionary<string, string>()
+            {
+                {"deviceId", deviceId},
+                {"requestData", command}
+            });
+            var json = await response.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<ResponsePayload>(json);
+            var t = data.Result.First().Value;
+            var state = JsonConvert.DeserializeObject<RequestBulb>(t);
+        }
+        
+        public async Task SetDeviceState(string deviceId, BulbState bulbState)
+        {
+            var comm = new RequestBulb()
+            {
+                Service = new BulbStateService()
+                {
+                    SetState = bulbState
                 }
             };
             string command = JsonConvert.SerializeObject(comm);
@@ -88,50 +100,29 @@ namespace SmartBulb.TpLinkApi.Implementation
         }
     }
 
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class RequestBulb
     {
         [JsonProperty("smartlife.iot.smartbulb.lightingservice")]
-        public LightService Service { get; set; }
+        public BulbStateService Service { get; set; }
     }
 
-    public class LightService
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+    public class BulbStateService
     {
         [JsonProperty("transition_light_state")]
-        public LightState State { get; set; }
+        public BulbState SetState { get; set; } = null;
+        
+        [JsonProperty("get_light_state")]
+        public BulbState GetState { get; set; } = null;
     }
-    
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public class LightState
-    {
-        [JsonProperty("on_off")]
-        public  PowerState? Power { get; set; }
-        
-        [JsonProperty("brightness")]
-        public int? Brightness { get; set; }
-        
-        [JsonProperty("hue")]
-        public int? Hue { get; set; }
-        
-        [JsonProperty("saturation")]
-        public int? Saturation { get; set; }
-        
-        /// <summary>
-        /// Время перехода из одного состояния в другое
-        /// </summary>
-        [JsonProperty("transition_period")]
-        public  long? TransitionTime { get; set; }
 
-        /// <summary>
-        ///  Хз что это, но в доке часто исспользуется для внутренних комманд
-        /// </summary>
-        [JsonProperty("ignore_default")]
-        private int IgnoreDefault { get; set; } = 1;
+    public class GetBulbStateService
+    {
+        [JsonProperty("get_light_state")]
+        public BulbState Info { get; set; }
     }
     
-    public enum PowerState {
-        Off,
-        On,
-    }
     
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class RequestPayload
