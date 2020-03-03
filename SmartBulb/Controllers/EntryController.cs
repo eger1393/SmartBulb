@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -60,50 +61,86 @@ namespace SmartBulb.Controllers
         }
 
         [HttpPost("tasks")]
-        public async Task<IActionResult> Tasks([FromBody] List<dynamic> items)
+        public async Task<IActionResult> Tasks([FromBody] List<SetStateTask> items)
         {
             if (items == null)
                 return BadRequest("Список задач пустой");
-            foreach (var item in items)
-            {
-                var stateTask = JsonConvert.DeserializeObject<SetStateTask>(item.ToString());
-                if(stateTask?.DeviceId != null)
-                // if (item is SetStateTask stateTask)
-                {
-                    await _tpLink.SetDeviceState(stateTask.DeviceId, stateTask.State);
-                    continue;
-                }
-                
-                var waitTask = JsonConvert.DeserializeObject<WaitTask>(item.ToString());
-                if(waitTask != null)
-                    // if (item is WaitTask waitTask)
-                {
-                    await Task.Delay(waitTask.WaitTime);
-                }
-            }
+            
+            if (items.Any(item => item.WaitTime == null && item.State == null))
+                return BadRequest($"Каждый элемент должен содержать в себе либо время для ожидания, либо смену состояния");
+
+            RunTasks(items);
             return Ok();
         }
+        
+        [HttpPost("repeatTasks")]
+        public async Task<IActionResult> RepeatTasks([FromBody] RepeatState model)
+        {
+            if (model.RepeatedTasks.Any(item => item.WaitTime == null && item.State == null))
+                return BadRequest($"Каждый элемент должен содержать в себе либо время для ожидания, либо смену состояния");
+            new Task(async () =>
+            {
+                if (model.StartState?.State != null)
+                {
+                    await _tpLink.SetDeviceState(model.StartState.DeviceId, model.StartState.State);
+                    await Task.Delay((int) model.StartState.State.TransitionTime);
+                }
+
+                for(int i = 0; i < model.RepeatCount; i++)
+                    await RunTasks(model.RepeatedTasks);
+                
+                if (model.EndState?.State != null)
+                {
+                    await _tpLink.SetDeviceState(model.EndState.DeviceId, model.EndState.State);
+                    await Task.Delay((int) model.EndState.State.TransitionTime);
+                }
+            }).Start();
+            return Ok();
+        }
+
+        private async Task RunTasks(List<SetStateTask> tasks)
+        {
+            foreach (var stateTask in tasks)
+            {
+                if(stateTask.WaitTime != null)
+                {
+                    await Task.Delay((int) stateTask.WaitTime);
+                    continue;
+                }
+                if(stateTask.DeviceId != null)
+                {
+                    _tpLink.SetDeviceState(stateTask.DeviceId, stateTask.State);
+                    continue;
+                }
+            }
+        } 
     }
 
-    public class SetStateTask : ITaskItem
+    public class RepeatState
     {
+        [JsonProperty("startState")]
+        public  SetStateTask StartState { get; set; }
+        
+        [JsonProperty("endState")]
+        public SetStateTask EndState { get; set; }
+        
+        [JsonProperty("repeatedTasks")]
         [Required]
+        public List<SetStateTask> RepeatedTasks { get; set; }
+        
+        [JsonProperty("repeatCount")]
+        [Required]
+        public int RepeatCount { get; set; }
+    }
+
+    public class SetStateTask
+    {
         [JsonProperty("deviceId")]
         public string DeviceId { get; set; }
-        [Required]
         [JsonProperty("state")]
         public BulbState State { get; set; }
-    }
-
-    public class WaitTask : ITaskItem
-    {
-        [Required]
-        [JsonProperty("waitTime")]
-        public int WaitTime { get; set; }
-    }
-
-    public interface ITaskItem
-    {
         
+        [JsonProperty("waitTime")]
+        public int? WaitTime { get; set; }
     }
 }
