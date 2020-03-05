@@ -5,11 +5,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Application.db" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SmartBulb.Data\SmartBulb.Data.csproj" />
       <ProjectReference Include="..\SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

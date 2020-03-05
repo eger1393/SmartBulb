@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using SmartBulb.Data.Models;
 using SmartBulb.TpLinkApi.Implementation;
-using SmartBulb.TpLinkApi.Models;
 
 namespace SmartBulb.TpLinkApi.Abstract
 {
@@ -10,5 +10,7 @@ namespace SmartBulb.TpLinkApi.Abstract
         Task SetDeviceState(string deviceId, BulbState bulbState);
 
         Task GetDeviceState(string deviceId);
+
+        Task StartScript(Script script );
     }
 }

@@ -1,13 +1,12 @@
 ﻿
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using SmartBulb.Data.Models;
+using SmartBulb.Data.Repositories.Abstract;
 using SmartBulb.TpLinkApi.Abstract;
-using SmartBulb.TpLinkApi.Implementation;
-using SmartBulb.TpLinkApi.Models;
 
 namespace SmartBulb.Controllers
 {
@@ -16,10 +15,12 @@ namespace SmartBulb.Controllers
     public class EntryController : ControllerBase
     {
         private readonly ITpLink _tpLink;
+        private readonly IScriptRepository _scriptRepository;
 
-        public EntryController(ITpLink tpLink)
+        public EntryController(ITpLink tpLink, IScriptRepository scriptRepository)
         {
-            _tpLink = tpLink;
+	        _tpLink = tpLink;
+	        _scriptRepository = scriptRepository;
         }
 
         [HttpGet("devices")]
@@ -74,7 +75,7 @@ namespace SmartBulb.Controllers
         }
         
         [HttpPost("repeatTasks")]
-        public async Task<IActionResult> RepeatTasks([FromBody] RepeatState model)
+        public async Task<IActionResult> RepeatTasks([FromBody] Script model)
         {
             if (model.RepeatedTasks.Any(item => item.WaitTime == null && item.State == null))
                 return BadRequest($"Каждый элемент должен содержать в себе либо время для ожидания, либо смену состояния");
@@ -98,6 +99,38 @@ namespace SmartBulb.Controllers
             return Ok();
         }
 
+        [HttpPost("scripts/add")]
+        public async Task<IActionResult> AddScript([FromBody]Script script)
+        {
+	        if (script.StartHour == null || script.StartMinute == null)
+		        return BadRequest("Задайте время запуска скрипта");
+	        if (string.IsNullOrEmpty(script.Name))
+		        return BadRequest("Задайте имя скрипта");
+            _scriptRepository.Add(script);
+	        return Ok();
+        }
+
+        [HttpGet("scripts")]
+        public IActionResult ScriptList()
+        {
+	        return Ok(_scriptRepository.GetAll().Select(x => new
+	        {
+                x.Id,
+                x.Name,
+                x.StartHour,
+                x.StartMinute
+	        }));
+        }
+
+        [HttpDelete("scripts/{id}")]
+        public IActionResult DeleteScript([FromRoute] Guid id)
+        {
+	        if (id == Guid.Empty)
+		        return BadRequest("Не правильный id");
+            _scriptRepository.Delete(id);
+            return Ok();
+        }
+
         private async Task RunTasks(List<SetStateTask> tasks)
         {
             foreach (var stateTask in tasks)
@@ -114,33 +147,5 @@ namespace SmartBulb.Controllers
                 }
             }
         } 
-    }
-
-    public class RepeatState
-    {
-        [JsonProperty("startState")]
-        public  SetStateTask StartState { get; set; }
-        
-        [JsonProperty("endState")]
-        public SetStateTask EndState { get; set; }
-        
-        [JsonProperty("repeatedTasks")]
-        [Required]
-        public List<SetStateTask> RepeatedTasks { get; set; }
-        
-        [JsonProperty("repeatCount")]
-        [Required]
-        public int RepeatCount { get; set; }
-    }
-
-    public class SetStateTask
-    {
-        [JsonProperty("deviceId")]
-        public string DeviceId { get; set; }
-        [JsonProperty("state")]
-        public BulbState State { get; set; }
-        
-        [JsonProperty("waitTime")]
-        public int? WaitTime { get; set; }
     }
 }

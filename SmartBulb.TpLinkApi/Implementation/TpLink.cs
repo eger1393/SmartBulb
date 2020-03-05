@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SmartBulb.Data.Models;
 using SmartBulb.TpLinkApi.Abstract;
-using SmartBulb.TpLinkApi.Models;
 
 namespace SmartBulb.TpLinkApi.Implementation
 {
@@ -44,7 +44,25 @@ namespace SmartBulb.TpLinkApi.Implementation
             var t = data.Result.First().Value;
             var state = JsonConvert.DeserializeObject<RequestBulb>(t);
         }
-        
+
+        public async Task StartScript(Script script)
+        {
+	        if (script.StartState?.State != null)
+	        {
+		        await SetDeviceState(script.StartState.DeviceId, script.StartState.State);
+		        await Task.Delay((int)script.StartState.State.TransitionTime);
+	        }
+
+	        for (int i = 0; i < script.RepeatCount; i++)
+		        await RunTasks(script.RepeatedTasks);
+
+	        if (script.EndState?.State != null)
+	        {
+		        await SetDeviceState(script.EndState.DeviceId, script.EndState.State);
+		        await Task.Delay((int)script.EndState.State.TransitionTime);
+	        }
+        }
+
         public async Task SetDeviceState(string deviceId, BulbState bulbState)
         {
             var comm = new RequestBulb()
@@ -97,6 +115,23 @@ namespace SmartBulb.TpLinkApi.Implementation
             message.Content = new StringContent(JsonConvert.SerializeObject(payload));
             message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return _client.SendAsync(message);
+        }
+
+        private async Task RunTasks(List<SetStateTask> tasks)
+        {
+	        foreach (var stateTask in tasks)
+	        {
+		        if (stateTask.WaitTime != null)
+		        {
+			        await Task.Delay((int)stateTask.WaitTime);
+			        continue;
+		        }
+		        if (stateTask.DeviceId != null)
+		        {
+			        SetDeviceState(stateTask.DeviceId, stateTask.State).ConfigureAwait(false);
+			        continue;
+		        }
+	        }
         }
     }
 

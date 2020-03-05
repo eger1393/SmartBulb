@@ -4,3 +4,6 @@ obj/
 .idea
 .vs
 .idea
+*.db
+SmartBulb/Properties
+SmartBulb/Properties/PublishProfiles

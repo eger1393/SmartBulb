@@ -1,9 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
-namespace SmartBulb.TpLinkApi.Models
+namespace SmartBulb.Data.Models
 {
     public class Device
     {
+	    [Key]
+	    public Guid Id { get; set; }
+
         [JsonProperty("alias")] 
         public string Alias { get; set; }
         

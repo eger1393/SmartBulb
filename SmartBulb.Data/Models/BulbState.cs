@@ -1,10 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
-namespace SmartBulb.TpLinkApi.Models
+namespace SmartBulb.Data.Models
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class BulbState
     {
+	    [Key]
+	    public Guid Id { get; set; }
+
         [JsonProperty("on_off")]
         public  PowerState? Power { get; set; }
         
