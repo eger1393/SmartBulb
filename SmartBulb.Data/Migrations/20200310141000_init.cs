@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartBulb.Data.Migrations
 {
-    public partial class firstMigration : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,6 +22,20 @@ namespace SmartBulb.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BulbState", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Login = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    Token = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,7 +69,8 @@ namespace SmartBulb.Data.Migrations
                     EndStateId = table.Column<Guid>(nullable: true),
                     RepeatCount = table.Column<int>(nullable: false),
                     StartHour = table.Column<int>(nullable: true),
-                    StartMinute = table.Column<int>(nullable: true)
+                    StartMinute = table.Column<int>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,7 +87,18 @@ namespace SmartBulb.Data.Migrations
                         principalTable: "SetStateTask",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Scripts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Login", "Password", "Token" },
+                values: new object[] { new Guid("650d4def-b04c-434d-866d-dd21a446e776"), "andronov.dmitry@gmail.com", "K@$@P@$$w0rd", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Scripts_EndStateId",
@@ -85,6 +111,11 @@ namespace SmartBulb.Data.Migrations
                 column: "StartStateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Scripts_UserId",
+                table: "Scripts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SetStateTask_ScriptId",
                 table: "SetStateTask",
                 column: "ScriptId");
@@ -93,6 +124,12 @@ namespace SmartBulb.Data.Migrations
                 name: "IX_SetStateTask_StateId",
                 table: "SetStateTask",
                 column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Login",
+                table: "Users",
+                column: "Login",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_SetStateTask_Scripts_ScriptId",
@@ -121,6 +158,9 @@ namespace SmartBulb.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "BulbState");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

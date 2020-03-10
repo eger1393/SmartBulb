@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartBulb.Data.Models
 {
@@ -32,5 +33,11 @@ namespace SmartBulb.Data.Models
 
 		[JsonProperty("startMinute")]
 		public int? StartMinute { get; set; }
+
+		[JsonProperty("userId")]
+		public Guid UserId { get; set; }
+
+		[ForeignKey(nameof(UserId))]
+		public User User { get; set; }
 	}
 }

@@ -30,6 +30,7 @@ namespace SmartBulb
 
             services.AddDbContext<DataContext>(x => x.UseSqlite(_configuration.GetConnectionString("default")), ServiceLifetime.Singleton);
             services.AddSingleton<IScriptRepository, ScriptRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddHostedService<StartScriptService>();
         }
 

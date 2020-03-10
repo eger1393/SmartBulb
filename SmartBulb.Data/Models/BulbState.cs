@@ -14,12 +14,15 @@ namespace SmartBulb.Data.Models
         public  PowerState? Power { get; set; }
         
         [JsonProperty("brightness")]
+        [Range(0, 100)]
         public int? Brightness { get; set; }
         
         [JsonProperty("hue")]
+        [Range(0, 360)]
         public int? Hue { get; set; }
         
         [JsonProperty("saturation")]
+        [Range(0, 100)]
         public int? Saturation { get; set; }
         
         [JsonProperty("color_temp")]

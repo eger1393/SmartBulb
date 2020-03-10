@@ -9,8 +9,8 @@ using SmartBulb.Data;
 namespace SmartBulb.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200305164527_firstMigration")]
-    partial class firstMigration
+    [Migration("20200310141000_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,11 +71,16 @@ namespace SmartBulb.Data.Migrations
                     b.Property<Guid?>("StartStateId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EndStateId");
 
                     b.HasIndex("StartStateId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Scripts");
                 });
@@ -107,6 +112,37 @@ namespace SmartBulb.Data.Migrations
                     b.ToTable("SetStateTask");
                 });
 
+            modelBuilder.Entity("SmartBulb.Data.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("650d4def-b04c-434d-866d-dd21a446e776"),
+                            Login = "andronov.dmitry@gmail.com",
+                            Password = "K@$@P@$$w0rd"
+                        });
+                });
+
             modelBuilder.Entity("SmartBulb.Data.Models.Script", b =>
                 {
                     b.HasOne("SmartBulb.Data.Models.SetStateTask", "EndState")
@@ -116,6 +152,12 @@ namespace SmartBulb.Data.Migrations
                     b.HasOne("SmartBulb.Data.Models.SetStateTask", "StartState")
                         .WithMany()
                         .HasForeignKey("StartStateId");
+
+                    b.HasOne("SmartBulb.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartBulb.Data.Models.SetStateTask", b =>
