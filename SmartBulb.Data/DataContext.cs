@@ -7,14 +7,14 @@ namespace SmartBulb.Data
 	public class DataContext : DbContext
 	{
 		public DbSet<Script> Scripts { get; set; }
-		public DbSet<SetStateTask> SetStateTask { get; set; }
+		public DbSet<BaseTask> BaseTasks { get; set; }
 		public DbSet<User> Users { get; set; }
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
-			//base.Database.EnsureDeleted();
-			//base.Database.EnsureCreated();
-			base.Database.Migrate();
+			base.Database.EnsureDeleted();
+			base.Database.EnsureCreated();
+			//base.Database.Migrate();
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

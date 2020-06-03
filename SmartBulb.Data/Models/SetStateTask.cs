@@ -4,17 +4,22 @@ using Newtonsoft.Json;
 
 namespace SmartBulb.Data.Models
 {
-	public class SetStateTask
+	public class SetStateTask : BaseTask
 	{
-		[Key]
-		public Guid Id { get; set; }
 
+		/// <summary>
+		/// Ид устройства
+		/// </summary>
 		[JsonProperty("deviceId")]
+		[Required]
 		public string DeviceId { get; set; }
+		/// <summary>
+		/// Новое состояние устройства
+		/// </summary>
 		[JsonProperty("state")]
+		[Required]
 		public BulbState State { get; set; }
 
-		[JsonProperty("waitTime")]
-		public int? WaitTime { get; set; }
+		
 	}
 }

@@ -2,14 +2,26 @@
 using System.Threading.Tasks;
 using SmartBulb.Data.Models;
 using SmartBulb.TpLinkApi.Implementation;
+using SmartBulb.TpLinkApi.Models;
 
 namespace SmartBulb.TpLinkApi.Abstract
 {
     public interface ITpLink
     {
-        Task<dynamic> GetDeviceList(Guid userId);
-        Task SetDeviceState(Guid userId, string deviceId, BulbState bulbState);
+	    /// <summary>
+        /// Возвращает список доступных устройств
+        /// </summary>
+        /// <param name="userId">Ид пользователя</param>
+        /// <returns></returns>
+        Task<ResponseDeviceListPayload> GetDeviceList(Guid userId);
 
-        Task StartScript(Script script );
+        /// <summary>
+        /// Переводит устройство в новое состояние
+        /// </summary>
+        /// <param name="userId">Ид пользователя</param>
+        /// <param name="deviceId">Ид устройства</param>
+        /// <param name="bulbState">Новое состояние</param>
+        /// <returns></returns>
+        Task SetDeviceState(Guid userId, string deviceId, BulbState bulbState);
     }
 }

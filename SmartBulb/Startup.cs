@@ -8,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 using SmartBulb.Data;
 using SmartBulb.Data.Repositories.Abstract;
 using SmartBulb.Data.Repositories.Implementation;
+using SmartBulb.Models;
 using SmartBulb.Services;
 using SmartBulb.TpLinkApi.Abstract;
+using SmartBulb.TpLinkApi.HttpClients;
 using SmartBulb.TpLinkApi.Implementation;
 
 namespace SmartBulb
@@ -20,17 +22,21 @@ namespace SmartBulb
 
 	    public Startup(IConfiguration configuration)
 	    {
-		    this._configuration = configuration;
+		    _configuration = configuration;
 	    }
 
 	    public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddNewtonsoftJson();
-            services.AddHttpClient<ITpLink, TpLink>();
+            services.AddControllersWithViews().AddNewtonsoftJson(x => x.SerializerSettings.Converters.Add(new BaseTaskConverter()));
 
-            services.AddDbContext<DataContext>(x => x.UseSqlite(_configuration.GetConnectionString("default")), ServiceLifetime.Singleton);
-            services.AddSingleton<IScriptRepository, ScriptRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddDbContext<DataContext>(x => x.UseSqlite(_configuration.GetConnectionString("default")));
+            services.AddScoped<IScriptRepository, ScriptRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddHttpClient<ITpLinkHttpClient, TpLinkHttpClient>();
+            services.AddScoped<ITpLinkWorkService, TpLinkWorkService>();
+            services.AddScoped<ITpLink, TpLink>();
+
             services.AddHostedService<StartScriptService>();
         }
 
