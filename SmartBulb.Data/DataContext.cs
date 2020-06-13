@@ -26,12 +26,7 @@ namespace SmartBulb.Data
 
 		private void Seed(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<User>().HasData(new User()
-			{
-				Id = new Guid("650D4DEF-B04C-434D-866D-DD21A446E776"),
-				Login = "andronov.dmitry@gmail.com",
-				Password = "K@$@P@$$w0rd"
-			});
+			
 		}
 	}
 }
