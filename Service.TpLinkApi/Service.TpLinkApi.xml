@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Service.TpLinkApi</name>
+    </assembly>
+    <members>
+        <member name="M:Service.TpLinkApi.Controllers.AuthorizeController.Authorize(Service.TpLinkApi.Models.AuthorizeRequest)">
+            <summary>
+            Авторизует пользователя
+            </summary>
+            <param name="model"></param>
+            <returns>Токен авторизации</returns>
+        </member>
+        <member name="M:Service.TpLinkApi.Controllers.DeviceController.GetList(System.String)">
+            <summary>
+            Получает список всех доступных устройств
+            </summary>
+            <param name="tpLinkToken">Токен авторизации</param>
+            <returns>список устройств</returns>
+            <response code="200"></response>   
+        </member>
+        <member name="M:Service.TpLinkApi.Controllers.DeviceController.SetState(System.String,System.String,TpLinkApi.Implementation.Models.BulbState)">
+            <summary>
+            Устанавливает новое состояние
+            </summary>
+            <param name="tpLinkToken">Токен авторизации</param>
+            <param name="deviceId">ИД устройства</param>
+            <param name="state">Новое состояние</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

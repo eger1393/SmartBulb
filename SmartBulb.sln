@@ -1,10 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb.TpLinkApi", "SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj", "{38C66B61-25C0-4900-8D14-7B992D0648C2}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.TpLinkApi", "SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj", "{38C66B61-25C0-4900-8D14-7B992D0648C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb.Data", "SmartBulb.Data\SmartBulb.Data.csproj", "{C961C3A2-A883-474D-A5AF-C8165A7A6345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.Data", "SmartBulb.Data\SmartBulb.Data.csproj", "{C961C3A2-A883-474D-A5AF-C8165A7A6345}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartBulb", "SmartBulb\SmartBulb.csproj", "{31F86999-FFA8-407B-B246-C3E1DB1546C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb", "SmartBulb\SmartBulb.csproj", "{31F86999-FFA8-407B-B246-C3E1DB1546C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.TpLinkApi", "Service.TpLinkApi\Service.TpLinkApi.csproj", "{DD153F10-B8CC-4477-B91D-BE0299150AD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Script", "Service.Script\Service.Script.csproj", "{77CBBE68-7C87-4325-A6FE-0D33433F83EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostedServices", "HostedServices\HostedServices.csproj", "{4F330B3A-191F-4A22-9CE1-60D77A68169F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gate", "Gate\Gate.csproj", "{0EE1EAB1-5097-434A-A015-A6FF6B9B89CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TpLinkApi.Implementation", "TpLinkApi.Implementation\TpLinkApi.Implementation.csproj", "{284AD07B-E5F5-4C02-82D5-BAFADF702EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +37,31 @@ Global
 		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F86999-FFA8-407B-B246-C3E1DB1546C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD153F10-B8CC-4477-B91D-BE0299150AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD153F10-B8CC-4477-B91D-BE0299150AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD153F10-B8CC-4477-B91D-BE0299150AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD153F10-B8CC-4477-B91D-BE0299150AD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77CBBE68-7C87-4325-A6FE-0D33433F83EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77CBBE68-7C87-4325-A6FE-0D33433F83EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77CBBE68-7C87-4325-A6FE-0D33433F83EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77CBBE68-7C87-4325-A6FE-0D33433F83EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F330B3A-191F-4A22-9CE1-60D77A68169F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F330B3A-191F-4A22-9CE1-60D77A68169F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F330B3A-191F-4A22-9CE1-60D77A68169F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F330B3A-191F-4A22-9CE1-60D77A68169F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EE1EAB1-5097-434A-A015-A6FF6B9B89CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EE1EAB1-5097-434A-A015-A6FF6B9B89CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EE1EAB1-5097-434A-A015-A6FF6B9B89CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EE1EAB1-5097-434A-A015-A6FF6B9B89CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284AD07B-E5F5-4C02-82D5-BAFADF702EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284AD07B-E5F5-4C02-82D5-BAFADF702EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284AD07B-E5F5-4C02-82D5-BAFADF702EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284AD07B-E5F5-4C02-82D5-BAFADF702EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1D59BA1-4B5D-4334-9037-7016E17F46F0}
 	EndGlobalSection
 EndGlobal
