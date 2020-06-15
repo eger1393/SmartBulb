@@ -23,7 +23,7 @@ namespace Gate.Services
 
 		public async Task<HttpResponseMessage> ForwardRequest(HttpContext context, Uri targetUri)
 		{
-			var targetRequestMessage = CreateTargetMessage(context, targetUri);
+			var targetRequestMessage = CreateTargetMessage(context, new Uri(targetUri, context.Request.Path));
 			return await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead,
 				context.RequestAborted);
 		}
@@ -63,6 +63,10 @@ namespace Gate.Services
 			foreach (var header in context.Request.Headers)
 			{
 				requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+			}
+			foreach (var header in context.Request.Headers)
+			{
+				requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
 			}
 		}
 
