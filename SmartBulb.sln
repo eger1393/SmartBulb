@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.TpLinkApi", "SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj", "{38C66B61-25C0-4900-8D14-7B992D0648C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.TpLinkApi", "Old\SmartBulb.TpLinkApi\SmartBulb.TpLinkApi.csproj", "{38C66B61-25C0-4900-8D14-7B992D0648C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.Data", "SmartBulb.Data\SmartBulb.Data.csproj", "{C961C3A2-A883-474D-A5AF-C8165A7A6345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb.Data", "Old\SmartBulb.Data\SmartBulb.Data.csproj", "{C961C3A2-A883-474D-A5AF-C8165A7A6345}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb", "SmartBulb\SmartBulb.csproj", "{31F86999-FFA8-407B-B246-C3E1DB1546C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBulb", "Old\SmartBulb\SmartBulb.csproj", "{31F86999-FFA8-407B-B246-C3E1DB1546C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.TpLinkApi", "Microservices\TpLinkApi\Service.TpLinkApi\Service.TpLinkApi.csproj", "{DD153F10-B8CC-4477-B91D-BE0299150AD4}"
 EndProject
