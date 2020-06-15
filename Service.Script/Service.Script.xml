@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Service.Script</name>
+    </assembly>
+    <members>
+        <member name="M:Service.Script.Controllers.ScriptController.RunScript(Service.Script.Data.Models.Script)">
+            <summary>
+            Запускает переданный скрипт немедленно
+            полезно использовать для проверки срипта
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Service.Script.Controllers.ScriptController.AddScript(Service.Script.Data.Models.Script)">
+            <summary>
+            Добавляет новый скрипт в БД
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Service.Script.Controllers.ScriptController.GetAll">
+            <summary>
+            Возвращает все сохраненные скрипты
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Service.Script.Controllers.ScriptController.DeleteScript(System.Guid)">
+            <summary>
+            Удаляет скрипт из БД
+            </summary>
+            <param name="id">Ид скрипта</param>
+            <returns></returns>
+        </member>
+        <member name="M:Service.Script.Services.IScripExecutor.StartScript(Service.Script.Data.Models.Script)">
+            <summary>
+            Запускает скрипт
+            </summary>
+            <param name="script"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
