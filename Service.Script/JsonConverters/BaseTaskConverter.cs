@@ -1,27 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SmartBulb.Data.Models;
+using Service.Script.Data.Models;
 
-namespace SmartBulb.Models
+namespace Service.Script.JsonConverters
 {
-	public class RunTasksApiModel
-	{
-		/// <summary>
-		/// Список задач
-		/// </summary>
-		[Required]
-		public List<BaseTask> Tasks { get; set; }
-
-		/// <summary>
-		/// Кол-во повторений
-		/// </summary>
-		[Required]
-		public int Count { get; set; }
-	}
-
 	public class BaseTaskConverter : JsonConverter<BaseTask>
 	{
 		public override void WriteJson(JsonWriter writer, BaseTask value, JsonSerializer serializer)

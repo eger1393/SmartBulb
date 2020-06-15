@@ -75,7 +75,7 @@ namespace TpLinkApi.Implementation.HttpClients
 			{
 				Method = method,
 				Params = param
-			};
+			};	
 			message.Content = new StringContent(JsonConvert.SerializeObject(payload));
 			message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 			var response = await _client.SendAsync(message);
