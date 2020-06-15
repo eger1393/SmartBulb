@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  gate:
+    build:
+      context: .
+      dockerfile: Microservices/Gate/Dockerfile
+    ports:
+      - "8090:80"
+
+  tplinkapi:
+    container_name: TpLinkApi
+    build:
+      context: .
+      dockerfile: Microservices/TpLinkApi/Service.TpLinkApi/Dockerfile
+    ports:
+      - "8092:80"
+
+  scriptservice:
+    container_name: ScriptService
+    build:
+      context: .
+      dockerfile: Microservices/ScriptService/Service.Script/Dockerfile
+    ports:
+      - "8091:80"
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    environment:
+      POSTGRES_PASSWORD: P@ssw0rd
+    image: "postgres" # use latest official postgres version
+    ports:
+      - "5432:5432"

@@ -4,5 +4,12 @@
         <name>Gate</name>
     </assembly>
     <members>
+        <member name="M:Gate.Controllers.AuthorizeController.Authorize(Gate.Controllers.AuthorizeRequest)">
+            <summary>
+            Авторизует пользователя
+            </summary>
+            <param name="model"></param>
+            <returns>Токен авторизации</returns>
+        </member>
     </members>
 </doc>
