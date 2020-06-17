@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {history} from './Services/history'
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Pages from "./Pages";
+import {configureAxios} from "./Services/configureAxios";
+import {Router} from "react-router";
+
+configureAxios(history);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Router history={history}>
+            <Pages/>
+        </Router>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
