@@ -36,6 +36,7 @@ const LoginPage = () => {
         <LoginContainer>
             <FieldsContainer>
                 <h2>Система управления умными лампами</h2>
+                <h3>Для тестирования можно исспользовать eger1393@gmail.com\password</h3>
                 <TextField
                     id="login"
                     value={fields.login}
@@ -59,6 +60,6 @@ const LoginPage = () => {
             <ImageStyled src={logo}/>
         </LoginContainer>
     );
-}
+};
 
 export default LoginPage;
