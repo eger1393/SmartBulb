@@ -46,6 +46,24 @@ namespace TpLinkApi.Implementation
 			return data.Result.Devices;
 		}
 
+		public async Task<BulbState> GetDeviceState(string token, string deviceId)
+		{
+			var command = new JObject
+			{
+				["smartlife.iot.smartbulb.lightingservice"] = new JObject()
+				{
+					{"get_light_state", null}
+				}
+			};
+			var response = await _httpClient.SendPassthroughRequest(token, deviceId, command.ToString());
+			var t = JObject.Parse(response);
+			var t2 = JObject.Parse(t["result"]["responseData"].ToString());
+			var data = JsonConvert.DeserializeObject<BulbState>(
+				t2["smartlife.iot.smartbulb.lightingservice"]["get_light_state"].ToString());
+			//var data = JsonConvert.DeserializeObject<BulbState>(response);
+			return data;
+		}
+
 		public Task<string> Authorize(string login, string password)
 		{
 			return  _httpClient.Authorize(login, password);

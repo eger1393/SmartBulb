@@ -47,14 +47,14 @@ namespace Service.TpLinkApi.Controllers
 			return Ok();
 		}
 
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <returns></returns>
-		//[HttpGet]
-		//public IActionResult GetState()
-		//{
-		//	return Ok();
-		//}
-    }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("{deviceId}")]
+		public async Task<IActionResult> GetState([FromHeader] string tpLinkToken, [FromRoute] string deviceId)
+		{
+			return Ok(await _tpLink.GetDeviceState(tpLinkToken, deviceId));
+		}
+	}
 }
