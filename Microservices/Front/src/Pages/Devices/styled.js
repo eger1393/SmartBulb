@@ -19,4 +19,15 @@ export const PowerIcon = styled(PowerSettingsNew)`
         border: 2px solid #11b83d;
         border-radius: 50%;
     ` : ``}
+    &:hover{
+       cursor: pointer;
+       opacity: 0.6;
+    }
+`;
+
+export const DeviceStateControlsContainer = styled.div`
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
 `;

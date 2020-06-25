@@ -36,7 +36,7 @@ const LoginPage = () => {
         <LoginContainer>
             <FieldsContainer>
                 <h2>Система управления умными лампами</h2>
-                <h3>Для тестирования можно исспользовать eger1393@gmail.com\password</h3>
+                <h3>Что-бы помигать лампочкой у меня дома исспользуйте<br/>eger1393@gmail.com\password</h3>
                 <TextField
                     id="login"
                     value={fields.login}

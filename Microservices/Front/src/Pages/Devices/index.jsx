@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography} from "@material-ui/core";
 import {ExpandMore, WbIncandescent} from '@material-ui/icons';
-import {apiGetDeviceList, apiGetDeviceState} from "../../Api/device";
-import {Container, DeviceListContainer, PowerIcon} from "./styled";
+import {apiGetDeviceList, apiGetDeviceState, apiSetDeviceState} from "../../Api/device";
+import {Container, DeviceListContainer, DeviceStateControlsContainer, PowerIcon} from "./styled";
+import TextField from "../../Components/DebouncedNumberField";
 
 /*
 device:
@@ -34,6 +35,21 @@ const DevicesPage = () => {
         })();
     }, []);
 
+    const handleCallTpLinkApi = async (deviceId, newState) => {
+        let res = await apiSetDeviceState(deviceId, {...newState});
+        handleChangeDeviceState(deviceId, res);
+        //setDevices(prev => prev.map(x => x.deviceId === deviceId ? {...x, ...res} : {...x}))
+    };
+
+    const handleChangeDeviceState = (deviceId, mergedState) => {
+        setDevices(prev => prev.map(x => x.deviceId === deviceId ? {...x, ...mergedState} : {...x}))
+    };
+
+    const getBulbColor = device => {
+        if (device.on_off === 1)
+            return `hsl(${device.hue}, ${device.saturation}%, 65%)`;
+        return '';
+    };
 
     if (!isLoaded) return <>Loading...</>;
     console.log(devices);
@@ -49,48 +65,52 @@ const DevicesPage = () => {
                         expandIcon={<ExpandMore/>}
                     >
                         {/*TODO сделать нормальный расчет цвета, который учитывает яркость(сейчас есть косяки со 100% яркостью)*/}
-                        <WbIncandescent style={{color: `hsl(${x.hue}, ${x.saturation}%, 65%)`}}/>
+                        <WbIncandescent style={{color: getBulbColor(x)}}/>
                         <Typography style={{marginLeft: '20px', marginRight: 'auto'}}>{x.alias}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography>
-                            <PowerIcon poweron={x.on_off}/>
-                        </Typography>
+                        <DeviceStateControlsContainer>
+                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                                <TextField
+                                    type="number"
+                                    max={100}
+                                    min={0}
+                                    label="Яроксть"
+                                    value={x.brightness}
+                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
+                                    debounce={500}
+                                    onChange={e => handleChangeDeviceState(x.deviceId, {brightness: e.target.value})}
+                                />
+                                <TextField
+                                    type="number"
+                                    label="Оттенок"
+                                    max={360}
+                                    min={0}
+                                    value={x.hue}
+                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
+                                    debounce={500}
+                                    onChange={e => handleChangeDeviceState(x.deviceId, {hue: e.target.value})}
+                                />
+                                <TextField
+                                    type="number"
+                                    max={100}
+                                    min={0}
+                                    label="Насыщенность"
+                                    value={x.saturation}
+                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
+                                    debounce={500}
+                                    onChange={e => handleChangeDeviceState(x.deviceId, {saturation: e.target.value})}
+                                />
+                            </div>
+                            <div>
+                                <PowerIcon poweron={x.on_off}
+                                           onClick={() => handleCallTpLinkApi(x.deviceId, {on_off: !x.on_off})}/>
+                            </div>
+                        </DeviceStateControlsContainer>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             )}
 
-            <ExpansionPanel expanded={expanded === '1'} onChange={() => setExpanded(expanded !== '1' ? '1' : '')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMore/>}
-                >
-                    <WbIncandescent/>
-                    <Typography style={{marginLeft: '20px', marginRight: 'auto'}}>{'test2'}</Typography>
-                    <PowerIcon poweron={0}/>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
-                        maximus est, id dignissim quam.
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-
-            <ExpansionPanel expanded={expanded === '2'} onChange={() => setExpanded(expanded !== '2' ? '2' : '')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMore/>}
-                >
-                    <WbIncandescent/>
-                    <Typography style={{marginLeft: '20px', marginRight: 'auto'}}>{'test3'}</Typography>
-                    <PowerIcon poweron={1}/>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
-                        maximus est, id dignissim quam.
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
         </DeviceListContainer>
     </Container>)
 };
