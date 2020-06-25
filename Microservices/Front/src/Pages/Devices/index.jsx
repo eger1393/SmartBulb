@@ -3,7 +3,8 @@ import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography
 import {ExpandMore, WbIncandescent} from '@material-ui/icons';
 import {apiGetDeviceList, apiGetDeviceState, apiSetDeviceState} from "../../Api/device";
 import {Container, DeviceListContainer, DeviceStateControlsContainer, PowerIcon} from "./styled";
-import TextField from "../../Components/DebouncedNumberField";
+import {PhotoshopPicker} from 'react-color'
+import {hsv} from 'color-convert'
 
 /*
 device:
@@ -28,26 +29,43 @@ const DevicesPage = () => {
             let deviceWithState = [];
             for (let device of devices) {
                 let res = await apiGetDeviceState(device.deviceId);
-                deviceWithState.push({...device, ...res});
+                deviceWithState.push({
+                    ...device,
+                    color: {
+                        h: res.hue,
+                        s: res.saturation/100,
+                        v: res.brightness/100,
+                        a: 1,
+                    },
+                    power: !!res.on_off,
+                });
             }
             setDevices(deviceWithState);
             setIsLoaded(true);
         })();
     }, []);
 
-    const handleCallTpLinkApi = async (deviceId, newState) => {
-        let res = await apiSetDeviceState(deviceId, {...newState});
-        handleChangeDeviceState(deviceId, res);
-        //setDevices(prev => prev.map(x => x.deviceId === deviceId ? {...x, ...res} : {...x}))
+    const handleTogglePower = (device) => async () => {
+        changeDeviceState(device.deviceId, {power: !device.power});
+        await apiSetDeviceState(device.deviceId, {on_off: !device.power});
     };
 
-    const handleChangeDeviceState = (deviceId, mergedState) => {
+    const handleSetColor = device => async color => {
+        apiSetDeviceState(device.deviceId, {
+            hue: Number.parseInt(color.hsv.h),
+            saturation: Number.parseInt(color.hsv.s * 100),
+            brightness: Number.parseInt(color.hsv.v * 100),
+        });
+        changeDeviceState(device.deviceId, {color: color.hsv})
+    };
+
+    const changeDeviceState = (deviceId, mergedState) => {
         setDevices(prev => prev.map(x => x.deviceId === deviceId ? {...x, ...mergedState} : {...x}))
     };
 
     const getBulbColor = device => {
-        if (device.on_off === 1)
-            return `hsl(${device.hue}, ${device.saturation}%, 65%)`;
+        if (device.power)
+            return `rgb(${hsv.rgb([device.color.h, device.color.s * 100, device.color.v * 100]).toString()})`;
         return '';
     };
 
@@ -71,40 +89,15 @@ const DevicesPage = () => {
                     <ExpansionPanelDetails>
                         <DeviceStateControlsContainer>
                             <div style={{display: 'flex', flexDirection: 'column'}}>
-                                <TextField
-                                    type="number"
-                                    max={100}
-                                    min={0}
-                                    label="Яроксть"
-                                    value={x.brightness}
-                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
-                                    debounce={500}
-                                    onChange={e => handleChangeDeviceState(x.deviceId, {brightness: e.target.value})}
-                                />
-                                <TextField
-                                    type="number"
-                                    label="Оттенок"
-                                    max={360}
-                                    min={0}
-                                    value={x.hue}
-                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
-                                    debounce={500}
-                                    onChange={e => handleChangeDeviceState(x.deviceId, {hue: e.target.value})}
-                                />
-                                <TextField
-                                    type="number"
-                                    max={100}
-                                    min={0}
-                                    label="Насыщенность"
-                                    value={x.saturation}
-                                    debounceCallback={() => handleCallTpLinkApi(x.deviceId, {...x})}
-                                    debounce={500}
-                                    onChange={e => handleChangeDeviceState(x.deviceId, {saturation: e.target.value})}
+                                {/*TODO сделать нормальный пикер, что-бы анимация смены цвета происходила при перетаскивании мышкой, а отправка на сервер после отжатия кнопки*/}
+                                <PhotoshopPicker
+                                    color={x.color}
+                                    onChangeComplete={handleSetColor(x)}
                                 />
                             </div>
                             <div>
-                                <PowerIcon poweron={x.on_off}
-                                           onClick={() => handleCallTpLinkApi(x.deviceId, {on_off: !x.on_off})}/>
+                                <PowerIcon poweron={x.power}
+                                           onClick={handleTogglePower(x)}/>
                             </div>
                         </DeviceStateControlsContainer>
                     </ExpansionPanelDetails>

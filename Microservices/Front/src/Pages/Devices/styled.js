@@ -8,14 +8,14 @@ export const Container = styled.div`
 
 export const DeviceListContainer = styled.div`
     margin-top: 50px;
-    width: 300px;
+    width: 600px;
 `;
 
 export const PowerIcon = styled(PowerSettingsNew)`
     width: 24px;
     height: 24px;
     box-sizing: border-box;
-    ${props => props.poweron ? `
+    ${props => props.poweron === true ? `
         border: 2px solid #11b83d;
         border-radius: 50%;
     ` : ``}
