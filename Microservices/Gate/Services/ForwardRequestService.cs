@@ -30,7 +30,7 @@ namespace Gate.Services
 
 		public async Task ForwardResponse(HttpContext context, HttpResponseMessage response)
 		{
-			context.Response.StatusCode = (int) response.StatusCode;
+			context.Response.StatusCode = (int)response.StatusCode;
 			CopyFromTargetResponseHeaders(context, response);
 			await response.Content.CopyToAsync(context.Response.Body);
 		}
@@ -52,9 +52,9 @@ namespace Gate.Services
 			var requestMethod = context.Request.Method;
 
 			if (!HttpMethods.IsGet(requestMethod) &&
-			    !HttpMethods.IsHead(requestMethod) &&
-			    !HttpMethods.IsDelete(requestMethod) &&
-			    !HttpMethods.IsTrace(requestMethod))
+				!HttpMethods.IsHead(requestMethod) &&
+				!HttpMethods.IsDelete(requestMethod) &&
+				!HttpMethods.IsTrace(requestMethod))
 			{
 				var streamContent = new StreamContent(context.Request.Body);
 				requestMessage.Content = streamContent;
@@ -64,9 +64,13 @@ namespace Gate.Services
 			{
 				requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
 			}
-			foreach (var header in context.Request.Headers)
+
+			if (requestMessage.Content == null)
 			{
-				requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+				foreach (var header in context.Request.Headers)
+				{
+					requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+				}
 			}
 		}
 

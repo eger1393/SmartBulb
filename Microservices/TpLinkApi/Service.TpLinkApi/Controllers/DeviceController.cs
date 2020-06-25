@@ -43,8 +43,7 @@ namespace Service.TpLinkApi.Controllers
 		[HttpPost("{deviceId}/setState")]
 		public async Task<IActionResult> SetState([FromHeader] string tpLinkToken, [FromRoute] string deviceId, [FromBody] BulbState state)
 		{
-			await _tpLink.SetDeviceState(tpLinkToken, deviceId, state);
-			return Ok();
+			return Ok(await _tpLink.SetDeviceState(tpLinkToken, deviceId, state));
 		}
 
 		/// <summary>

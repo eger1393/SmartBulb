@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>9769c3df-c26d-4d28-a564-18f4143d035a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/weatherforecast</DockerServiceUrl>
+    <DockerServiceUrl>http://localhost:8095/</DockerServiceUrl>
     <DockerServiceName>gate</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

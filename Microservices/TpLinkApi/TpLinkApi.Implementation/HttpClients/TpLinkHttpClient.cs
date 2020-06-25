@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using TpLinkApi.Implementation.Exceptions;
 using TpLinkApi.Implementation.JsonModels;
 using TpLinkApi.Implementation.Models;
 
@@ -88,8 +90,11 @@ namespace TpLinkApi.Implementation.HttpClients
 		private void ErrorChecking(string content)
 		{
 			var error = JsonConvert.DeserializeObject<ErrorResponse>(content);
+			// TODO подумать как это переделать что-бы не писать милион ифов
+			if(error.ErrorCode == -20651)
+				throw new TpLinkAuthorizeException(error.Message);
 			if (error.ErrorCode != 0)
-				throw new Exception(error.Message);
+				throw new BaseBusinessException(error.Message);
 		}
 	}
 }

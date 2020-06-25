@@ -8,7 +8,7 @@ namespace TpLinkApi.Implementation.Models
     public class BulbState
     {
 	    [Key]
-	    public Guid Id { get; set; }
+	    public Guid? Id { get; set; }
 
         [JsonProperty("on_off")]
         public  PowerState? Power { get; set; }

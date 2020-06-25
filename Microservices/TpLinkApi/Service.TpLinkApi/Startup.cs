@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Service.TpLinkApi.Middleware;
 using TpLinkApi.Implementation;
 using TpLinkApi.Implementation.HttpClients;
 
@@ -53,6 +54,8 @@ namespace Service.TpLinkApi
 
 			app.UseRouting();
 			app.UseSwagger();
+
+			app.Use(ExceptionMiddleware.UnauthorizedExceptionMiddleware);
 
 			app.UseEndpoints(endpoints =>
 			{

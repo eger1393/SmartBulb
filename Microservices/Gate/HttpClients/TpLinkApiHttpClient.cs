@@ -52,7 +52,6 @@ namespace Gate.HttpClients
 				Content = new StringContent(JsonConvert.SerializeObject(state))
 			};
 			message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-			message.Headers.Add("tpLinkToken", token);
 			var response = await _client.SendAsync(message);
 			var result = await response.Content.ReadAsStringAsync();
 			if (!response.IsSuccessStatusCode)

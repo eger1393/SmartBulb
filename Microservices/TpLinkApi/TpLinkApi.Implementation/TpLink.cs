@@ -25,16 +25,27 @@ namespace TpLinkApi.Implementation
 			_httpClient = httpClient;
 		}
 
-		public async Task SetDeviceState(string token, string deviceId, BulbState newBulbState)
+		public async Task<BulbState> SetDeviceState(string token, string deviceId, BulbState newBulbState)
 		{
 			var command = new JObject
 			{
 				["smartlife.iot.smartbulb.lightingservice"] = new JObject()
 				{
-					{"transition_light_state", JsonConvert.SerializeObject(newBulbState)}
+					["transition_light_state"] = JObject.FromObject(newBulbState)
 				}
 			};
-			await _httpClient.SendPassthroughRequest(token, deviceId, command.ToString());
+			var response = await _httpClient.SendPassthroughRequest(token, deviceId, command.ToString());
+			var t = JObject.Parse(response);
+			var t2 = JObject.Parse(t["result"]["responseData"].ToString());
+			var state = t2["smartlife.iot.smartbulb.lightingservice"]["transition_light_state"];
+			if (state["dft_on_state"] != null)
+			{
+				var result = JsonConvert.DeserializeObject<BulbState>(state["dft_on_state"].ToString());
+				result.Power = PowerState.Off;
+				return result;
+			}
+
+			return JsonConvert.DeserializeObject<BulbState>(state.ToString());
 		}
 
 		public async Task<List<Device>> GetDeviceList(string token)
@@ -58,10 +69,15 @@ namespace TpLinkApi.Implementation
 			var response = await _httpClient.SendPassthroughRequest(token, deviceId, command.ToString());
 			var t = JObject.Parse(response);
 			var t2 = JObject.Parse(t["result"]["responseData"].ToString());
-			var data = JsonConvert.DeserializeObject<BulbState>(
-				t2["smartlife.iot.smartbulb.lightingservice"]["get_light_state"].ToString());
-			//var data = JsonConvert.DeserializeObject<BulbState>(response);
-			return data;
+			var state = t2["smartlife.iot.smartbulb.lightingservice"]["get_light_state"];
+			if (state["dft_on_state"] != null)
+			{
+				var result =  JsonConvert.DeserializeObject<BulbState>(state["dft_on_state"].ToString());
+				result.Power = PowerState.Off;
+				return result;
+			}
+
+			return JsonConvert.DeserializeObject<BulbState>(state.ToString());
 		}
 
 		public Task<string> Authorize(string login, string password)

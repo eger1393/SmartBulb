@@ -29,7 +29,7 @@ namespace TpLinkApi.Implementation
 		/// <param name="deviceId"></param>
 		/// <param name="newBulbState"></param>
 		/// <returns></returns>
-        Task SetDeviceState(string token, string deviceId, BulbState newBulbState);
+        Task<BulbState> SetDeviceState(string token, string deviceId, BulbState newBulbState);
 
 		/// <summary>
 		/// Получает текущее состояние устройства
