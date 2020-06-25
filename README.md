@@ -5,6 +5,14 @@
 
 информация о апи TpLink была взята из https://github.com/DaveGut/TP-Link-SmartThings
 
+Для запуска проекта исспользовать
+
+```docker-compose build```
+
+```docker-compose up```
+
+Для работы с админкой зайти на http://localhost:8095/
+
 
 Структура проекта:
 ```
