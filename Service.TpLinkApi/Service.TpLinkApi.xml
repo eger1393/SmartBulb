@@ -28,5 +28,11 @@
             <param name="state">Новое состояние</param>
             <returns></returns>
         </member>
+        <member name="M:Service.TpLinkApi.Controllers.DeviceController.GetState(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

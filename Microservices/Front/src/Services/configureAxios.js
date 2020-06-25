@@ -2,14 +2,14 @@ import axios from 'axios'
 
 export const configureAxios = (history) => {
     axios.interceptors.request.use(config => {
-        config.headers["Authorization"] = "bearer " + getAuthToken();
+        config.headers["TpLinkToken"] = getUserToken();
         return config;
     });
 
     axios.interceptors.response.use(response => response,
         error => {
             if(error.response.status === 401){
-                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userToken');
                 history.push("/")
             }
             return Promise.reject(error);
@@ -17,7 +17,7 @@ export const configureAxios = (history) => {
 };
 
 
-const getAuthToken = () => {
-    return localStorage.getItem('currentUser');
+const getUserToken = () => {
+    return localStorage.getItem('userToken');
 };
 
